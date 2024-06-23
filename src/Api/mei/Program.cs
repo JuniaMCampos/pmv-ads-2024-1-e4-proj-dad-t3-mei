@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 
 
 namespace mei
@@ -55,6 +56,15 @@ namespace mei
                 };
             });
 
+            // Add CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+            });
+
             builder.Services.AddControllers()
                 .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -69,7 +79,9 @@ namespace mei
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // Configure the HTTP request pipeline. 
+            // Mostra ou não o swagger na págia inicial da aplicação depois do deploy
+            // Retirar if caso queira {apiUrl}/ mostre o swagger
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -78,7 +90,7 @@ namespace mei
 
             app.UseHttpsRedirection();
 
-            app.UseCors(MyAllowSpecificOrigins);
+            app.UseCors("CorsPolicy"); // CORS
 
             app.UseAuthentication();
             app.UseAuthorization();

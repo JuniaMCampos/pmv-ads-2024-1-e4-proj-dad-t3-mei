@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { Button } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
@@ -9,20 +9,29 @@ const SaldoVendas = () => {
   const [userId, setUserId] = useState(null);
   const [userFaturamentos, setUserFaturamentos] = useState([]);
   const [totalFaturamentos, setTotalFaturamentos] = useState(0);
-  const [periodo, setPeriodo] = useState("mes");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getToken = async () => {
-      const token = await AsyncStorage.getItem("token");
-      const decodedToken = jwtDecode(token);
-      setUserId(decodedToken.nameid);
+      setLoading(true);
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        setUserId(decodedToken.nameid);
+        console.log("Token encontrado e decodificado = ", decodedToken.nameid);
+      } else {
+        console.log('Token não encontrado');
+      }
+      setLoading(false);
     };
 
     getToken();
-  }, []);
+  }, [totalFaturamentos]);
+
 
   useEffect(() => {
     if (userId) {
+      setLoading(true);
       fetch(`${API_URLS.FATURAMENTOS}`)
         .then((response) => response.json())
         .then((faturamentosData) => {
@@ -31,16 +40,20 @@ const SaldoVendas = () => {
           );
           setUserFaturamentos(filteredFaturamentos);
           const totalFaturamentos = filteredFaturamentos.reduce(
-            (acc, cur) => acc + cur.valor,
-            0
+            (acc, cur) => acc + cur.valor, 0
           );
           setTotalFaturamentos(totalFaturamentos);
         })
         .catch((error) => {
           console.error("Erro ao buscar dados:", error);
-        });
+        })
+        .finally(() => setLoading(false));
     }
   }, [userId, userFaturamentos]);
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#0000ff" />;
+  }
 
   return (
     <View>
@@ -51,14 +64,7 @@ const SaldoVendas = () => {
           <Text style={[{ fontSize: 24, color: "#349c14" }]}>
             {totalFaturamentos.toLocaleString("pt-BR")}
           </Text>
-        </View>
-        <View style={styles.containerBotoes}>
-          <Button mode="contained" onPress={() => setPeriodo("mes")}>
-            MÊS
-          </Button>
-          <Button mode="contained" onPress={() => setPeriodo("ano")}>
-            ANO
-          </Button>
+          <Text style={{ fontSize: 12, padding: 8, marginLeft: 130 }}>de 81.000,00</Text>
         </View>
       </View>
     </View>

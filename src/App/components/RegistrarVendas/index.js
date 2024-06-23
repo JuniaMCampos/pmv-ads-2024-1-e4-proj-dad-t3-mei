@@ -6,10 +6,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import CurrencyInput from "react-native-currency-input";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
-
-const urlProdutos = "http://10.0.2.2:5062/api/Produtos";
-const urlServicos = "http://10.0.2.2:5062/api/Servicos";
-const url = "http://10.0.2.2:5062/api/Faturamentos";
+import API_URLS from "../../config/apiUrls";
 
 const Vendas = () => {
   const [usuarioId, setUserId] = useState("");
@@ -31,11 +28,18 @@ const Vendas = () => {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        const token = await AsyncStorage.getItem("token");
-        const decodedToken = jwtDecode(token.toString());
-        setUserId(decodedToken.nameid);
+        const token = await AsyncStorage.getItem('token');
+        if (token) {
+          const decodedToken = jwtDecode(token);
+          setUserId(decodedToken.nameid);
+          console.log(token)
+        } else {
+          console.log(token)
+          console.error("Token inválido ou não encontrado");
+        }
       } catch (error) {
         console.error("Erro ao buscar o token:", error);
+        alert("Erro ao buscar suas informações. Tente novamente mais tarde.")
       }
     };
     fetchToken();
@@ -45,8 +49,8 @@ const Vendas = () => {
     if (usuarioId) {
       setIsLoading(true);
       Promise.all([
-        fetch(urlProdutos).then((response) => response.json()),
-        fetch(urlServicos).then((response) => response.json()),
+        fetch(API_URLS.PRODUTOS).then((response) => response.json()),
+        fetch(API_URLS.SERVICOS).then((response) => response.json()),
       ])
         .then(([produtosData, servicosData]) => {
           setProdutos(
@@ -96,7 +100,7 @@ const Vendas = () => {
     };
 
     try {
-      const response = await fetch(url, {
+      const response = await fetch(API_URLS.FATURAMENTOS, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -163,7 +167,7 @@ const Vendas = () => {
           <View>
             <TextInput
               style={styles.input}
-              label="Venda de ..."
+              label="Mais informações"
               value={nome}
               onChange={handleChange}
               onChangeText={(text) => setNome(text)}
@@ -201,7 +205,7 @@ const Vendas = () => {
               separator=","
               precision={2}
               minValue={0}
-              onChangeText={() => {}}
+              onChangeText={() => { }}
             />
           </View>
         </View>

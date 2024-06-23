@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { Button } from "react-native-paper";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
@@ -10,12 +10,16 @@ const SaldoVendas = () => {
   const [userDespesas, setUserDespesas] = useState([]);
   const [totalDespesas, setTotalDespesas] = useState(0);
   const [periodo, setPeriodo] = useState("mes");
+  const [loading, setLoading] = useState(true);
+
 
   useEffect(() => {
     const getToken = async () => {
+      setLoading(true);
       const token = await AsyncStorage.getItem("token");
       const decodedToken = jwtDecode(token);
       setUserId(decodedToken.nameid);
+      setLoading(false);
     };
 
     getToken();
@@ -23,6 +27,7 @@ const SaldoVendas = () => {
 
   useEffect(() => {
     if (userId) {
+      setLoading(true);
       fetch(`${API_URLS.DESPESAS}`)
         .then((response) => response.json())
         .then((DespesasData) => {
@@ -38,27 +43,20 @@ const SaldoVendas = () => {
         })
         .catch((error) => {
           console.error("Erro ao buscar dados:", error);
-        });
+        })
+        .finally(() => setLoading(false));
     }
   }, [userId, userDespesas]);
 
   return (
     <View>
-      <Text style={styles.text}>Seu faturamento</Text>
+      <Text style={styles.text}>Sua despesa</Text>
       <View style={styles.faturamentoContainer}>
         <View style={styles.containerBotoes}>
           <Text style={{ fontSize: 24 }}>R$</Text>
           <Text style={[{ fontSize: 24, color: "#e72424" }]}>
             {totalDespesas.toLocaleString("pt-BR")}
           </Text>
-        </View>
-        <View style={styles.containerBotoes}>
-          <Button mode="contained" onPress={() => setPeriodo("mes")}>
-            MÊS
-          </Button>
-          <Button mode="contained" onPress={() => setPeriodo("ano")}>
-            ANO
-          </Button>
         </View>
       </View>
     </View>
