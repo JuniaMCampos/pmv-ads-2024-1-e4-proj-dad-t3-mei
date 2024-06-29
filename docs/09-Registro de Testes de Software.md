@@ -44,3 +44,40 @@ Observação (correções futuras):
 2. Ao adicionar, editar e excluir 'produto/ serviço/ categoria', a tela inicial não é atualizada;
 3. Melhoria: exibir mensagem de sucesso ao editar/excluir poduto/serviço/categoria; No momento só exibe mensagem de sucesso ao incluir;
 4. Corrigir mensagem de sucesso ao adicionar categoria: trocar adicionado por adicionada;
+
+
+**Teste Software App Web versão 2**
+
+[Teste Home](https://www.youtube.com/watch?v=7DCw6Lxhytc)
+
+[Teste Cadastro e Login](https://www.youtube.com/watch?v=DLIEMXPDUEI)
+
+[Teste Gerenciamento Produto](https://www.youtube.com/watch?v=uxUBwW874I8)
+
+[Teste Gerenciamento Servico](https://www.youtube.com/watch?v=8TNfBEy_Jec)
+
+[Teste Gerenciamento Categoria](https://www.youtube.com/watch?v=7aJV2elY_hk)
+
+[Teste Gerenciamnto Clientes](https://www.youtube.com/watch?v=E05ivrUDS6g)
+
+[Teste Registro de Vendas](https://www.youtube.com/watch?v=eBYX55fWIZ4)
+
+[Teste Estourar Limite MEI](https://www.youtube.com/watch?v=EKggO7f1rHc)
+
+[Teste Limite Vermelho MEI](https://www.youtube.com/watch?v=x-TyIcIYkrs)
+
+[Teste Registri de Vendas](https://www.youtube.com/watch?v=HUG8KssfjC4)
+
+[Teste Tela de Registro Feitos](https://www.youtube.com/watch?v=BN-9H2mlzxY)
+
+[Teste Tela Perfil e Sair](https://www.youtube.com/watch?v=d2bkmlOY3EM)
+
+**Teste Software APP Android**
+
+[Teste APP Principal](https://www.youtube.com/watch?v=_ITQkfk8reY)
+
+[Teste Cadastro e Login](https://www.youtube.com/watch?v=sVdU5ntVVsE)
+
+[Teste Adicionando Produto](https://www.youtube.com/watch?v=tkn7jlNfZQ4)
+
+[Teste Adicionando Serviço](https://www.youtube.com/watch?v=aPwcWU6WmJ0)
